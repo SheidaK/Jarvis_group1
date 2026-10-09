@@ -23,8 +23,6 @@ project/
         transactions.csv
 ```
 
-This README assumes the command-line entry point is named `main.py`. Substitute its actual filename if different.
-
 | File | Responsibility |
 |---|---|
 | `main.py` | Parse command-line options, identify inputs, and run loading, processing, and reporting |
