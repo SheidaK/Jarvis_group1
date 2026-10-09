@@ -1,0 +1,14 @@
+Transactions Processed: 240
+Approved: 215
+Rejected: 25
+Flagged For Review: 21
+
+Rejections by reason:
+  INACTIVE ACCOUNT: 5
+  INSUFFICIENT FUNDS: 5
+  INVALID ACCOUNT: 4
+  INVALID AMOUNT: 4
+  DUPLICATE TRANSACTION: 3
+  INVALID DATA: 2
+  INVALID TRANSFER: 1
+  UNSUPPORTED TYPE: 1
