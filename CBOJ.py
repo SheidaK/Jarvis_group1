@@ -4,6 +4,8 @@ from pathlib import Path
 
 from db import get_connection, init_db, DB_PATH
 from loader import load_accounts, load_transactions
+from processor import process_all
+from report import write_reports
 
 
 def identify(csv_file):
@@ -21,6 +23,7 @@ def main():
     parser = argparse.ArgumentParser(description="CBOJ transaction processing engine")
     parser.add_argument("folder", help="Folder containing the accounts and transactions CSVs")
     parser.add_argument("--db", default=DB_PATH, help="SQLite file to write to")
+    parser.add_argument("--out", default="reports", help="Folder for report files")
     args = parser.parse_args()
 
     folder = Path(args.folder)
@@ -46,7 +49,9 @@ def main():
     print(f"Loaded {n_acc} accounts from {files['accounts'].name}")
     print(f"Loaded {n_tx} transactions from {files['transactions'].name}")
 
-    # Next step for the team: from processor import process_all; process_all(conn)
+    summary = process_all(conn)
+    print(write_reports(conn, args.out))
+    print(f"\nReports written to {Path(args.out).resolve()}")
 
 
 if __name__ == "__main__":

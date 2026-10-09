@@ -48,6 +48,14 @@ CREATE TABLE IF NOT EXISTS flags (
     reason    TEXT NOT NULL         -- e.g. LARGE AMOUNT, DAILY LIMIT, VELOCITY
 );
 CREATE INDEX IF NOT EXISTS idx_flags_row ON flags(row_num);
+
+-- Written by the processor. `accounts.balance_cents` stays as the opening
+-- balance (raw input); the updated balance lives here.
+CREATE TABLE IF NOT EXISTS account_balances (
+    account_id             TEXT PRIMARY KEY,
+    opening_balance_cents  INTEGER,
+    final_balance_cents    INTEGER
+);
 """
 
 
@@ -61,6 +69,7 @@ def init_db(conn: sqlite3.Connection, reset: bool = True) -> None:
     """Create tables. reset=True drops existing data so reruns start clean."""
     if reset:
         conn.executescript(
+            "DROP TABLE IF EXISTS account_balances; "
             "DROP TABLE IF EXISTS flags; DROP TABLE IF EXISTS results; "
             "DROP TABLE IF EXISTS transactions; DROP TABLE IF EXISTS accounts;"
         )
@@ -72,4 +81,5 @@ def clear_results(conn: sqlite3.Connection) -> None:
     """Wipe processing output so the processor can be rerun without reloading CSVs."""
     conn.execute("DELETE FROM flags")
     conn.execute("DELETE FROM results")
+    conn.execute("DELETE FROM account_balances")
     conn.commit()
